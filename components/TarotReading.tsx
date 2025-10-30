@@ -148,7 +148,7 @@ const TarotReading: React.FC = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-black/40 rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-500/10">
+        <div className="max-w-4xl mx-auto p-6 bg-indigo-950 rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-500/10">
             <div className="mb-8">
                 <div 
                     className="flex justify-center items-center cursor-pointer group"
@@ -222,7 +222,9 @@ const TarotReading: React.FC = () => {
                 {error && <p className="text-center text-red-400 bg-red-900/50 p-3 rounded-lg">{error}</p>}
             </div>
 
-            <div className="mt-10 min-h-[500px]">
+            <hr className="border-t border-dashed border-yellow-400/30 my-8" />
+
+            <div className="min-h-[500px]">
                 {isLoading && (
                     <div className="animate-fade-in">
                         <h2 className="font-cinzel text-3xl text-yellow-300 text-center mb-4">Consulting the cosmos...</h2>

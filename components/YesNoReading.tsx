@@ -134,7 +134,7 @@ const YesNoReading: React.FC = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto p-4 sm:p-6 bg-black/40 rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-500/10">
+        <div className="max-w-md mx-auto p-4 sm:p-6 bg-indigo-950 rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-500/10">
             {!isLoading && !drawnCard && (
                  <div className="space-y-6 animate-fade-in">
                     <h2 className="font-cinzel text-3xl text-center text-yellow-300">Yes / No Reading</h2>

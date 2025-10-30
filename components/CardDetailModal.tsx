@@ -46,7 +46,7 @@ const CardDetailModal: React.FC<CardDetailModalProps> = ({ card, onClose }) => {
                 
                 <div className="flex flex-col items-center space-y-4">
                     <div className="w-full max-w-[280px]">
-                        <TarotCard card={card} isFlipped={true} />
+                        <TarotCard card={card} isFlipped={true} hideNameOverlay={true} />
                     </div>
                     
                     <div className="text-center w-full">

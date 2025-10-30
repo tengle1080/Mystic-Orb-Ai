@@ -109,12 +109,14 @@ const CardGenerator: React.FC = () => {
     };
     
     return (
-        <div className="max-w-7xl mx-auto p-6 bg-black/40 rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-500/10">
+        <div className="max-w-7xl mx-auto p-6 bg-indigo-950 rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-500/10">
             <header className="text-center mb-8">
                 <h2 className="font-cinzel text-3xl text-yellow-300">Tarot Card Forge</h2>
                 <p className="text-purple-200 mt-2">Describe your vision and let the AI bring it to life.</p>
             </header>
             
+            <hr className="border-t border-dashed border-yellow-400/30 my-6" />
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Left Column: Controls */}
                 <form onSubmit={handleGenerate} className="space-y-6">

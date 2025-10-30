@@ -1,18 +1,24 @@
 
+
 import React from 'react';
 import { CARD_BACK_IMAGE } from '../constants';
-import type { TarotCardInfo } from '../types';
+import type { TarotCardInfo, GeneratedCardInfo } from '../types';
 
 interface TarotCardProps {
     card: TarotCardInfo;
     isFlipped: boolean;
     isInteractive?: boolean;
+    hideNameOverlay?: boolean;
 }
 
-const TarotCard: React.FC<TarotCardProps> = ({ card, isFlipped, isInteractive = false }) => {
-    // A generated card has an 'id' property, while a pre-defined Major Arcana card does not.
-    // We only show the name overlay for generated cards, as the Major Arcana images have the name built-in.
-    const showName = 'id' in card;
+const TarotCard: React.FC<TarotCardProps> = ({ card, isFlipped, isInteractive = false, hideNameOverlay = false }) => {
+    // A generated card has an 'id' property. We only want to show the name overlay
+    // for user-generated cards, not for the Major Arcana which have names on the image.
+    // Major Arcana cards are given a special ID when added to the collection.
+    const isGenerated = 'id' in card;
+    const isMajorArcanaInCollection = isGenerated && (card as GeneratedCardInfo).id.startsWith('major-arcana-');
+    const shouldShowNameByDefault = isGenerated && !isMajorArcanaInCollection;
+    const showName = !hideNameOverlay && shouldShowNameByDefault;
 
     const interactiveClasses = isInteractive
         ? 'transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_3px_rgba(253,249,156,0.3)] rounded-xl'

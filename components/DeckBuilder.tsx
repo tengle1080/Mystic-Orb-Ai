@@ -18,7 +18,6 @@ const DeckBuilder: React.FC = () => {
     const dragOverItem = useRef<string | null>(null);
 
     useEffect(() => {
-        let loadedCardUrls: string[] = [];
         const loadData = async () => {
             const majorArcanaAsGenerated: GeneratedCardInfo[] = MAJOR_ARCANA.map(card => ({
                 ...card,
@@ -28,16 +27,11 @@ const DeckBuilder: React.FC = () => {
 
             const loadedDecks = getUserDecks();
             const loadedCards = await getGeneratedCards();
-            loadedCardUrls = loadedCards.map(c => c.imageUrl);
             setDecks(loadedDecks);
             setCards([...majorArcanaAsGenerated, ...loadedCards]);
         };
         
         loadData();
-
-        return () => {
-            loadedCardUrls.forEach(url => URL.revokeObjectURL(url));
-        };
     }, []);
 
     const updateDecks = (newDecks: UserDeck[]) => {
@@ -146,7 +140,7 @@ const DeckBuilder: React.FC = () => {
         <>
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* Left Column: Decks Panel */}
-                <div className="lg:col-span-1 space-y-6 p-6 bg-black/40 rounded-2xl border border-purple-500/30 shadow-lg">
+                <div className="lg:col-span-1 space-y-6 p-6 bg-indigo-950 rounded-2xl border border-purple-500/30 shadow-lg">
                     <div>
                         <h2 className="font-cinzel text-2xl text-yellow-300 mb-4">My Decks</h2>
                         <form onSubmit={handleCreateDeck} className="flex flex-col gap-3 mb-6">
@@ -162,6 +156,8 @@ const DeckBuilder: React.FC = () => {
                             </button>
                         </form>
                     </div>
+
+                    <hr className="border-t border-dashed border-yellow-400/30 !my-0" />
 
                     <nav className="space-y-2">
                         <DeckNavItem 
@@ -190,10 +186,11 @@ const DeckBuilder: React.FC = () => {
                 </div>
 
                 {/* Right Column: Card Collection */}
-                <div className="lg:col-span-3 p-6 bg-black/40 rounded-2xl border border-purple-500/30 shadow-lg min-h-[60vh]">
+                <div className="lg:col-span-3 p-6 bg-indigo-950 rounded-2xl border border-purple-500/30 shadow-lg min-h-[60vh]">
                     <h2 className="font-cinzel text-3xl text-center text-yellow-300 mb-6">
                         {getTitle()}
                     </h2>
+                     <hr className="border-t border-dashed border-yellow-400/30 mb-6 -mt-2" />
                     {displayedCards.length > 0 ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                         {displayedCards.map(card => (

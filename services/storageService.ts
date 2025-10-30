@@ -1,3 +1,4 @@
+
 import type { GeneratedCardInfo, UserDeck } from '../types';
 
 const DB_NAME = 'MysticOrbDB';
@@ -33,23 +34,6 @@ const getDb = (): Promise<IDBDatabase> => {
   return dbPromise;
 };
 
-// Helper to convert base64 data URL to a Blob
-const dataUrlToBlob = (dataUrl: string): Blob => {
-    const parts = dataUrl.split(',');
-    const mimeMatch = parts[0].match(/:(.*?);/);
-    if (!mimeMatch) {
-      throw new Error("Invalid data URL");
-    }
-    const mimeType = mimeMatch[1];
-    const b64 = atob(parts[1]);
-    let n = b64.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = b64.charCodeAt(n);
-    }
-    return new Blob([u8arr], { type: mimeType });
-};
-
 
 // --- Generated Cards using IndexedDB ---
 
@@ -58,17 +42,13 @@ export const getGeneratedCards = async (): Promise<GeneratedCardInfo[]> => {
     const db = await getDb();
     const transaction = db.transaction(CARDS_STORE_NAME, 'readonly');
     const store = transaction.objectStore(CARDS_STORE_NAME);
-    const storedObjects = await new Promise<any[]>((resolve, reject) => {
+    
+    // The stored objects already contain the data URL, so we can return them directly.
+    return await new Promise<GeneratedCardInfo[]>((resolve, reject) => {
         const request = store.getAll();
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
     });
-    
-    // Convert blob to object URL for display
-    return storedObjects.map(card => ({
-        ...card,
-        imageUrl: URL.createObjectURL(card.imageBlob)
-    }));
 
   } catch (error) {
     console.error("Error getting generated cards from IndexedDB", error);
@@ -82,17 +62,9 @@ export const saveGeneratedCard = async (newCard: GeneratedCardInfo): Promise<voi
       const transaction = db.transaction(CARDS_STORE_NAME, 'readwrite');
       const store = transaction.objectStore(CARDS_STORE_NAME);
       
-      const imageBlob = dataUrlToBlob(newCard.imageUrl);
-      
-      const cardToStore = {
-          id: newCard.id,
-          name: newCard.name,
-          prompt: newCard.prompt,
-          imageBlob: imageBlob
-      };
-
       await new Promise<void>((resolve, reject) => {
-          const request = store.put(cardToStore);
+          // Store the entire card object, which includes the 'imageUrl' as a base64 data URL.
+          const request = store.put(newCard);
           request.onsuccess = () => resolve();
           request.onerror = () => reject(request.error);
       });
