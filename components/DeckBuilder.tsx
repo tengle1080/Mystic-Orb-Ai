@@ -12,6 +12,7 @@ const DeckBuilder: React.FC = () => {
     const [selectedDeckId, setSelectedDeckId] = useState<string | null>(null);
     const [draggingCardId, setDraggingCardId] = useState<string | null>(null);
     const [viewingCard, setViewingCard] = useState<GeneratedCardInfo | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Refs for drag and drop
     const dragItem = useRef<string | null>(null);
@@ -118,7 +119,7 @@ const DeckBuilder: React.FC = () => {
     const selectedDeck = decks.find(d => d.id === selectedDeckId);
     const isDraggable = !!selectedDeck;
     
-    const displayedCards = (() => {
+    const baseDisplayedCards = (() => {
         if (selectedDeckId === 'major-arcana-preset') {
             return cards.filter(card => card.id.startsWith('major-arcana-'));
         }
@@ -129,6 +130,10 @@ const DeckBuilder: React.FC = () => {
         }
         return cards;
     })();
+
+    const displayedCards = baseDisplayedCards.filter(card =>
+        card.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const getTitle = () => {
         if (selectedDeckId === 'major-arcana-preset') return 'Preset: Major Arcana';
@@ -191,6 +196,18 @@ const DeckBuilder: React.FC = () => {
                         {getTitle()}
                     </h2>
                      <hr className="border-t border-dashed border-yellow-400/30 mb-6 -mt-2" />
+                    
+                    <div className="mb-6">
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search cards by name..."
+                            className="w-full bg-gray-800/50 border border-purple-400/50 rounded-lg p-3 text-gray-200 focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition"
+                            aria-label="Search cards in collection"
+                        />
+                    </div>
+
                     {displayedCards.length > 0 ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                         {displayedCards.map(card => (
@@ -211,6 +228,14 @@ const DeckBuilder: React.FC = () => {
                                     />
                                 </div>
                         ))}
+                        </div>
+                    ) : (searchQuery && baseDisplayedCards.length > 0) ? (
+                        <div className="flex flex-col items-center justify-center text-center text-purple-300/70 h-full p-8">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-purple-400/50 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <p className="text-lg font-bold">No cards found matching "{searchQuery}"</p>
+                            <p className="max-w-xs">Try a different search term or clear the filter.</p>
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center text-center text-purple-300/70 h-full p-8 border-2 border-dashed border-purple-400/30 rounded-xl">

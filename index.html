@@ -24,11 +24,24 @@
         from { transform: translateY(20px); opacity: 0; }
         to { transform: translateY(0); opacity: 1; }
       }
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+          filter: drop-shadow(0 0 10px rgba(253, 230, 138, 0.2));
+        }
+        50% {
+          transform: scale(1.02);
+          filter: drop-shadow(0 0 20px rgba(253, 230, 138, 0.4));
+        }
+      }
       .animate-fade-in {
         animation: fadeIn 0.3s ease-out forwards;
       }
       .animate-slide-up {
         animation: slideUp 0.4s ease-out forwards;
+      }
+      .animate-subtle-pulse {
+        animation: pulse 3s ease-in-out infinite;
       }
     </style>
   <script type="importmap">

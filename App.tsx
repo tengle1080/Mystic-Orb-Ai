@@ -74,7 +74,7 @@ const App: React.FC = () => {
         className={`fixed inset-0 bg-[#0c0a1a] flex items-center justify-center z-50 transition-opacity duration-500 ease-out ${isSplashFading ? 'opacity-0' : 'opacity-100'}`}
         aria-hidden="true"
       >
-        <div className="w-full max-w-sm p-4">
+        <div className="w-full max-w-sm p-4 animate-subtle-pulse">
           <img src={SPLASH_SCREEN_IMAGE} alt="Mystic Oracle AI Loading Screen" className="w-full h-auto" />
         </div>
       </div>
